@@ -1,3 +1,6 @@
+#ifndef LIBWECAN_H
+#define LIBWECAN_H
+
 #include <stdio.h>
 #include <unistd.h>
 #include <stdint.h>
@@ -184,3 +187,4 @@ double decode_double(uint8_t *frame, uint8_t startbit, uint8_t length,
         int64_t can_value = (int64_t)extract(frame, startbit, length, SIGNED, endianness);
         return (can_value * factor) + offset;
 }
+#endif /* LIBWECAN_H */
