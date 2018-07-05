@@ -177,7 +177,7 @@ void encode_double(uint8_t *frame, double physical_value, uint8_t startbit,
 uint64_t decode_uint64_t(uint8_t *frame, uint8_t startbit, uint8_t length, 
                 uint8_t endianness, double factor, double offset)
 {
-        uint64_t can_value = extract(frame, startbit, length, SIGNED, endianness);
+        uint64_t can_value = extract(frame, startbit, length, UNSIGNED, endianness);
         return (can_value * factor) + offset;
 }
 
