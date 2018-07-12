@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <stdint.h>
 
+#define FALSE     0
+#define TRUE      1
 #define UNSIGNED  2
 #define SIGNED    3
 #define INTEL     4
@@ -39,7 +41,7 @@ void compute_indexes(const uint8_t startbit, const uint8_t length, uint8_t endia
                 /* calcul index */
                 lsb = startbit;
                 msb = lsb + length - 1;
-                *byte_index_msb = (lsb + length - 1) / 8;
+                *byte_index_msb = msb / 8;
                 *byte_index_lsb = lsb / 8;
                 *offset_lsb = lsb % 8;
         }
@@ -80,7 +82,7 @@ uint64_t extract(const uint8_t *frame, const uint8_t startbit,
 {
         /* 
          * function returns the signal value in the can frame 
-         * if signal is negative, cast to inst64_t 
+         * if signal is negative, cast to int64_t 
          */
         uint8_t byte_index_msb = 0;
         uint8_t byte_index_lsb = 0;
@@ -167,7 +169,21 @@ void encode_uint64_t(uint8_t *frame, uint64_t physical_value, uint8_t startbit,
         insert(frame, startbit, length, can_value, endianness);
 }
 
+void encode_int64_t(uint8_t *frame, int64_t physical_value, uint8_t startbit,
+                uint8_t length, uint8_t endianness, double factor, double offset)
+{
+        uint64_t can_value = (physical_value - offset) / factor;
+        insert(frame, startbit, length, can_value, endianness);
+}
+
 void encode_double(uint8_t *frame, double physical_value, uint8_t startbit,
+                uint8_t length, uint8_t endianness, double factor, double offset)
+{
+        uint64_t can_value = (uint64_t)((physical_value - offset) / factor);
+        insert(frame, startbit, length, can_value, endianness);
+}
+
+void encode_float(uint8_t *frame, float physical_value, uint8_t startbit,
                 uint8_t length, uint8_t endianness, double factor, double offset)
 {
         uint64_t can_value = (uint64_t)((physical_value - offset) / factor);
@@ -181,7 +197,21 @@ uint64_t decode_uint64_t(uint8_t *frame, uint8_t startbit, uint8_t length,
         return (can_value * factor) + offset;
 }
 
+int64_t decode_int64_t(uint8_t *frame, uint8_t startbit, uint8_t length, 
+                uint8_t endianness, double factor, double offset)
+{
+        int64_t can_value = (int64_t)extract(frame, startbit, length, SIGNED, endianness);
+        return (can_value * factor) + offset;
+}
+
 double decode_double(uint8_t *frame, uint8_t startbit, uint8_t length, 
+                uint8_t endianness, double factor, double offset)
+{
+        int64_t can_value = (int64_t)extract(frame, startbit, length, SIGNED, endianness);
+        return (can_value * factor) + offset;
+}
+
+float decode_float(uint8_t *frame, uint8_t startbit, uint8_t length, 
                 uint8_t endianness, double factor, double offset)
 {
         int64_t can_value = (int64_t)extract(frame, startbit, length, SIGNED, endianness);
