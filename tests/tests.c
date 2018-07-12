@@ -699,7 +699,7 @@ int main(void)
          */
         printf("\n\n\n");
         printf("===========================================================\n");
-        printf("ENCODE DECODE MOTOROLA 32 bits double float value\n");
+        printf("ENCODE DECODE MOTOROLA 32 bits double value\n");
         printf("===========================================================\n");
         double physical_value = 50.6164;
         init_single_frame(frame, 8);
@@ -712,7 +712,8 @@ int main(void)
         encode_double(frame, physical_value, startbit, length, MOTOROLA, factor, offset);
         display_single(frame, 8);
         printf("\ndecoded value:       %lf\n", 
-                        decode_double(frame,startbit, length, MOTOROLA, factor, offset));
+                        decode_double(frame, startbit, length, MOTOROLA, factor, offset));
+        assert(physical_value == decode_double(frame, startbit, length, MOTOROLA, factor, offset));
 
         /*
          ***********************************************************************
@@ -721,7 +722,7 @@ int main(void)
          */
         printf("\n\n\n");
         printf("===========================================================\n");
-        printf("ENCODE DECODE MOTOROLA 32 bits double float negative value\n");
+        printf("ENCODE DECODE MOTOROLA 32 bits double negative value\n");
         printf("===========================================================\n");
         physical_value = -50.6164;
         init_single_frame(frame, 8);
@@ -734,7 +735,8 @@ int main(void)
         encode_double(frame, physical_value, startbit, length, MOTOROLA, factor, offset);
         display_single(frame, 8);
         printf("\ndecoded value:       %lf\n", 
-                        decode_double(frame,startbit, length, MOTOROLA, factor, offset));
+                        decode_double(frame, startbit, length, MOTOROLA, factor, offset));
+        assert(physical_value == decode_double(frame, startbit, length, MOTOROLA, factor, offset));
 
         /*
          ***********************************************************************
@@ -756,7 +758,8 @@ int main(void)
         encode_uint64_t(frame, uphysical_value, startbit, length, MOTOROLA, factor, offset);
         display_single(frame, 8);
         printf("\ndecoded value:       %ld\n", 
-                        decode_uint64_t(frame,startbit, length, MOTOROLA, factor, offset));
+                        decode_uint64_t(frame, startbit, length, MOTOROLA, factor, offset));
+        assert(uphysical_value == decode_uint64_t(frame, startbit, length, MOTOROLA, factor, offset));
 
         /*
          ***********************************************************************
@@ -765,7 +768,7 @@ int main(void)
          */
         printf("\n\n\n");
         printf("===========================================================\n");
-        printf("ENCODE DECODE INTEL 32 bits double float value\n");
+        printf("ENCODE DECODE INTEL 32 bits double value\n");
         printf("===========================================================\n");
         physical_value = 7.7979;
         init_single_frame(frame, 8);
@@ -778,7 +781,9 @@ int main(void)
         encode_double(frame, physical_value, startbit, length, INTEL, factor, offset);
         display_single(frame, 8);
         printf("\ndecoded value:       %lf\n",
-                        decode_double(frame,startbit, length, INTEL, factor, offset));
+                        decode_double(frame, startbit, length, INTEL, factor, offset));
+        assert((float)physical_value == 
+                        (float)decode_double(frame, startbit, length, INTEL, factor, offset));
 
         /*
          ***********************************************************************
@@ -787,7 +792,7 @@ int main(void)
          */
         printf("\n\n\n");
         printf("===========================================================\n");
-        printf("ENCODE DECODE INTEL 32 bits double float negative value\n");
+        printf("ENCODE DECODE INTEL 32 bits double negative value\n");
         printf("===========================================================\n");
         physical_value = -7.7979;
         init_single_frame(frame, 8);
@@ -800,7 +805,9 @@ int main(void)
         encode_double(frame, physical_value, startbit, length, INTEL, factor, offset);
         display_single(frame, 8);
         printf("\ndecoded value:       %lf\n", 
-                        decode_double(frame,startbit, length, INTEL, factor, offset));
+                        decode_double(frame, startbit, length, INTEL, factor, offset));
+        assert((float)physical_value == 
+                        (float)decode_double(frame, startbit, length, INTEL, factor, offset));
 
         /*
          ***********************************************************************
@@ -822,7 +829,8 @@ int main(void)
         encode_uint64_t(frame, uphysical_value, startbit, length, INTEL, factor, offset);
         display_single(frame, 8);
         printf("\ndecoded value:       %ld\n", 
-                        decode_uint64_t(frame,startbit, length, INTEL, factor, offset));
+                        decode_uint64_t(frame, startbit, length, INTEL, factor, offset));
+        assert(uphysical_value == decode_uint64_t(frame, startbit, length, INTEL, factor, offset));
 
         return 0;
 }
