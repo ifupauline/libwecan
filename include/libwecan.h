@@ -22,7 +22,7 @@
  * @param byte_index_msb [Out] byte index of the msb from the matrix start
  */
 void compute_indexes(const uint16_t startbit, const uint8_t length, uint8_t endianness, 
-                uint8_t *offset_lsb, uint8_t *byte_index_lsb, uint8_t *byte_index_msb)
+                uint8_t *offset_lsb, uint16_t *byte_index_lsb, uint16_t *byte_index_msb)
 {
         uint16_t msb = 0; 
         uint16_t lsb = 0;
@@ -71,8 +71,8 @@ void compute_indexes(const uint16_t startbit, const uint8_t length, uint8_t endi
  * @param endianness
  * @return uint64 in little endian format containing the signal to extract
  */
-uint64_t frame_to_local(const uint8_t *frame, uint8_t byte_index_lsb, 
-                uint8_t byte_index_msb, uint8_t endianness)
+uint64_t frame_to_local(const uint8_t *frame, uint16_t byte_index_lsb, 
+                uint16_t byte_index_msb, uint8_t endianness)
 {
         uint64_t target = frame[byte_index_lsb];
         uint8_t *dest = (uint8_t*) &target;
@@ -112,9 +112,9 @@ uint64_t frame_to_local(const uint8_t *frame, uint8_t byte_index_lsb,
 uint64_t extract(const uint8_t *frame, const uint16_t startbit, 
                 const uint8_t length, uint8_t signedness, uint8_t endianness)
 {
-        uint8_t byte_index_msb = 0;
-        uint8_t byte_index_lsb = 0;
-        uint8_t offset_lsb = 0;
+        uint16_t byte_index_msb = 0;
+        uint16_t byte_index_lsb = 0;
+        uint16_t offset_lsb = 0;
         uint64_t target = 0;
 
         compute_indexes(startbit, length, endianness, &offset_lsb, 
@@ -161,8 +161,8 @@ uint64_t extract(const uint8_t *frame, const uint16_t startbit,
 void insert(uint8_t *frame, uint16_t startbit, uint8_t length, uint64_t value, 
                 uint8_t endianness)
 {
-        uint8_t byte_index_msb = 0;
-        uint8_t byte_index_lsb = 0;
+        uint16_t byte_index_msb = 0;
+        uint16_t byte_index_lsb = 0;
         uint8_t offset_lsb = 0;
         uint64_t target = 0;
 
@@ -246,27 +246,27 @@ uint64_t decode_uint64_t(uint8_t *frame, uint16_t startbit, uint8_t length,
                 uint8_t endianness, double factor, double offset)
 {
         uint64_t can_value = extract(frame, startbit, length, UNSIGNED, endianness);
-        return (can_value * factor) + offset;
+        return (uint64_t)((can_value * factor) + offset);
 }
 
 int64_t decode_int64_t(uint8_t *frame, uint16_t startbit, uint8_t length, 
                 uint8_t endianness, double factor, double offset)
 {
         int64_t can_value = (int64_t)extract(frame, startbit, length, SIGNED, endianness);
-        return (can_value * factor) + offset;
+        return (int64_t)((can_value * factor) + offset);
 }
 
 double decode_double(uint8_t *frame, uint16_t startbit, uint8_t length, 
                 uint8_t endianness, double factor, double offset)
 {
         int64_t can_value = (int64_t)extract(frame, startbit, length, SIGNED, endianness);
-        return (can_value * factor) + offset;
+        return (double)((can_value * factor) + offset);
 }
 
 float decode_float(uint8_t *frame, uint16_t startbit, uint8_t length, 
                 uint8_t endianness, double factor, double offset)
 {
         int64_t can_value = (int64_t)extract(frame, startbit, length, SIGNED, endianness);
-        return (can_value * factor) + offset;
+        return (float)((can_value * factor) + offset);
 }
 #endif /* LIBWECAN_H */
