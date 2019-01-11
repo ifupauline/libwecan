@@ -32,9 +32,9 @@ int main(void)
         uint8_t frame[8] = {0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
         uint64_t value_unsigned = extract(frame, startbit, length, UNSIGNED, MOTOROLA);
         printf("step 1.1\n");
-        assert(expected_value_unsigned == value_unsigned);
         printf("expected_value_unsigned: %ld\n", expected_value_unsigned);
         printf("current_value:           %ld\n", value_unsigned);
+        assert(expected_value_unsigned == value_unsigned);
 
         /* step 1.2 all signal on 1 byte, signed */
         startbit  = 15;
@@ -43,9 +43,9 @@ int main(void)
         frame[1] = 0xFD;
         int64_t value_signed = (int64_t)extract(frame, startbit, length, SIGNED, MOTOROLA);
         printf("\nstep 1.2\n");
-        assert(expected_value_signed == value_signed);
         printf("expected_value_signed:   %ld\n", expected_value_signed);
         printf("current_value:           %ld\n", value_signed);
+        assert(expected_value_signed == value_signed);
 
         /* step 1.3 (lsb middle of byte), unsigned */
         startbit  = 27;
@@ -54,9 +54,9 @@ int main(void)
         frame[3] = 0x0E;
         value_unsigned = extract(frame, startbit, length, UNSIGNED, MOTOROLA);
         printf("\nstep 1.3\n");
-        assert(expected_value_unsigned == value_unsigned);
         printf("expected_value_unsigned:   %ld\n", expected_value_unsigned);
         printf("current_value:             %ld\n", value_unsigned);
+        assert(expected_value_unsigned == value_unsigned);
 
         /*
          * step x.x (lsb middle of byte), signed , signed signals always encoded on
@@ -70,9 +70,9 @@ int main(void)
         frame[2] = 0x3F;
         value_unsigned = extract(frame, startbit, length, UNSIGNED, MOTOROLA);
         printf("\nstep 1.4\n");
-        assert(expected_value_unsigned == value_unsigned);
         printf("expected_value_unsigned:   %ld\n", expected_value_unsigned);
         printf("current_value:             %ld\n", value_unsigned);
+        assert(expected_value_unsigned == value_unsigned);
 
         /* step 1.5 (lsb start of byte), signed */
         startbit  = 35;
@@ -81,9 +81,9 @@ int main(void)
         frame[4] = 0x0B;
         value_signed = (int64_t)extract(frame, startbit, length, SIGNED, MOTOROLA);
         printf("\nstep 1.5\n");
-        assert(expected_value_signed == value_signed);
         printf("expected_value_signed:     %ld\n", expected_value_signed);
         printf("current_value:             %ld\n", value_signed);
+        assert(expected_value_signed == value_signed);
 
         /* step 2 (2 bytes) */
         /* step 2.1 (all signal on 2 bytes), unsigned */
@@ -94,9 +94,9 @@ int main(void)
         frame[7] = 0xAB;
         value_unsigned = extract(frame, startbit, length, UNSIGNED, MOTOROLA);
         printf("\nstep 2.1\n");
-        assert(expected_value_unsigned == value_unsigned);
         printf("expected_value_unsigned:     %ld\n", expected_value_unsigned);
         printf("current_value:               %ld\n", value_unsigned);
+        assert(expected_value_unsigned == value_unsigned);
 
         /* step 2.2 (all signal on 2 bytes), signed */
         startbit  = 39;
@@ -106,9 +106,9 @@ int main(void)
         frame[5] = 0xF7;
         value_signed = (int64_t)extract(frame, startbit, length, SIGNED, MOTOROLA);
         printf("\nstep 2.2\n");
-        assert(expected_value_signed == value_signed);
         printf("expected_value_signed:       %ld\n", expected_value_signed);
         printf("current_value:               %ld\n", value_signed);
+        assert(expected_value_signed == value_signed);
 
         /* step 2.3 (lsb middle of byte), unsigned */
         startbit  = 26;
@@ -118,9 +118,9 @@ int main(void)
         frame[4] = 0xFC;
         value_unsigned = extract(frame, startbit, length, UNSIGNED, MOTOROLA);
         printf("\nstep 2.3\n");
-        assert(expected_value_unsigned == value_unsigned);
         printf("expected_value_unsigned:       %ld\n", expected_value_unsigned);
         printf("current_value:                 %ld\n", value_unsigned);
+        assert(expected_value_unsigned == value_unsigned);
 
         /*
          * step x.x (lsb middle of byte), signed , signed signals always encoded 
@@ -135,9 +135,9 @@ int main(void)
         frame[4] = 0xFF;
         value_unsigned = extract(frame, startbit, length, UNSIGNED, MOTOROLA);
         printf("\nstep 2.4\n");
-        assert(expected_value_unsigned == value_unsigned);
         printf("expected_value_unsigned:       %ld\n", expected_value_unsigned);
         printf("current_value:                 %ld\n", value_unsigned);
+        assert(expected_value_unsigned == value_unsigned);
 
         /* step 2.5 (lsb start of byte), signed */
         startbit  = 18;
@@ -147,9 +147,9 @@ int main(void)
         frame[3] = 0xEB;
         value_signed = (int64_t)extract(frame, startbit, length, SIGNED, MOTOROLA);
         printf("\nstep 2.5\n");
-        assert(expected_value_signed == value_signed);
         printf("expected_value_signed:         %ld\n", expected_value_signed);
         printf("current_value:                 %ld\n", value_signed);
+        assert(expected_value_signed == value_signed);
 
         /* step 2.6 (signal on 7 bytes, lsb start of byte), unsigned */
         startbit  = 7;
@@ -164,9 +164,9 @@ int main(void)
         frame[6] = 0xFF;
         value_unsigned = extract(frame, startbit, length, UNSIGNED, MOTOROLA);
         printf("\nstep 2.6\n");
-        assert(expected_value_unsigned == value_unsigned);
         printf("expected_value_unsigned:         %ld\n", expected_value_unsigned);
         printf("current_value:                   %ld\n", value_unsigned);
+        assert(expected_value_unsigned == value_unsigned);
 
         /* step 2.7 (signal on 4 bytes, lsb start of byte), signed */
         startbit  = 39;
@@ -178,9 +178,9 @@ int main(void)
         frame[7] = 0x5E;
         value_signed = (int64_t)extract(frame, startbit, length, SIGNED, MOTOROLA);
         printf("\nstep 2.7\n");
-        assert(expected_value_signed == value_signed);
         printf("expected_value_signed:         %ld\n", expected_value_signed);
         printf("current_value:                 %ld\n", value_signed);
+        assert(expected_value_signed == value_signed);
 
         /*
          ***********************************************************************
@@ -200,9 +200,9 @@ int main(void)
         frame[0] = 0xFF;
         value_unsigned = extract(frame, startbit, length, UNSIGNED, INTEL);
         printf("\nstep 3.1\n");
-        assert(expected_value_unsigned == value_unsigned);
         printf("expected_value_unsigned:         %ld\n", expected_value_unsigned);
         printf("current_value:                   %ld\n", value_unsigned);
+        assert(expected_value_unsigned == value_unsigned);
 
         /* step 3.2 all signal on 1 byte, signed */
         startbit  = 40;
@@ -211,9 +211,9 @@ int main(void)
         frame[5] = 0xDF;
         value_signed = (int64_t)extract(frame, startbit, length, SIGNED, INTEL);
         printf("\nstep 3.2\n");
-        assert(expected_value_signed == value_signed);
         printf("expected_value_signed:         %ld\n", expected_value_signed);
         printf("current_value:                 %ld\n", value_signed);
+        assert(expected_value_signed == value_signed);
 
         /* step 3.3 (lsb middle of byte), unsigned */
         startbit  = 17;
@@ -222,9 +222,9 @@ int main(void)
         frame[2] = 0x5E;
         value_unsigned = extract(frame, startbit, length, UNSIGNED, INTEL);
         printf("\nstep 3.3\n");
-        assert(expected_value_unsigned == value_unsigned);
         printf("expected_value_unsigned:         %ld\n", expected_value_unsigned);
         printf("current_value:                   %ld\n", value_unsigned);
+        assert(expected_value_unsigned == value_unsigned);
 
         /*
          * step x.x (lsb middle of byte), signed , signed signals always encoded 
@@ -238,9 +238,9 @@ int main(void)
         frame[6] = 0x76;
         value_unsigned = extract(frame, startbit, length, UNSIGNED, INTEL);
         printf("\nstep 3.4\n");
-        assert(expected_value_unsigned == value_unsigned);
         printf("expected_value_unsigned:         %ld\n", expected_value_unsigned);
         printf("current_value:                   %ld\n", value_unsigned);
+        assert(expected_value_unsigned == value_unsigned);
 
         /* step 3.5 (lsb start of byte), signed */
         startbit  = 32;
@@ -249,9 +249,9 @@ int main(void)
         frame[4] = 0xD3;
         value_signed = (int64_t)extract(frame, startbit, length, SIGNED, INTEL);
         printf("\nstep 3.5\n");
-        assert(expected_value_signed == value_signed);
         printf("expected_value_signed:         %ld\n", expected_value_signed);
         printf("current_value:                 %ld\n", value_signed);
+        assert(expected_value_signed == value_signed);
 
         /* step 4 (2 bytes) */
         /* step 4.1 (all signal on 2 bytes), unsigned */
@@ -262,9 +262,9 @@ int main(void)
         frame[4] = 0xD1;
         value_unsigned = extract(frame, startbit, length, UNSIGNED, INTEL);
         printf("\nstep 4.1\n");
-        assert(expected_value_unsigned == value_unsigned);
         printf("expected_value_unsigned:         %ld\n", expected_value_unsigned);
         printf("current_value:                   %ld\n", value_unsigned);
+        assert(expected_value_unsigned == value_unsigned);
 
         /* step 4.2 (all signal on 2 bytes), signed */
         startbit  = 48;
@@ -274,9 +274,9 @@ int main(void)
         frame[7] = 0xFC;
         value_signed = (int64_t)extract(frame, startbit, length, SIGNED, INTEL);
         printf("\nstep 4.2\n");
-        assert(expected_value_signed == value_signed);
         printf("expected_value_signed:         %ld\n", expected_value_signed);
         printf("current_value:                 %ld\n", value_signed);
+        assert(expected_value_signed == value_signed);
 
         /* step 4.3 (lsb middle of byte), unsigned */
         startbit  = 2;
@@ -286,9 +286,9 @@ int main(void)
         frame[1] = 0x34;
         value_unsigned = extract(frame, startbit, length, UNSIGNED, INTEL);
         printf("\nstep 4.3\n");
-        assert(expected_value_unsigned == value_unsigned);
         printf("expected_value_unsigned:         %ld\n", expected_value_unsigned);
         printf("current_value:                   %ld\n", value_unsigned);
+        assert(expected_value_unsigned == value_unsigned);
 
         /* 
          * step x.x (lsb middle of byte), signed , signed signals always encoded 
@@ -303,9 +303,9 @@ int main(void)
         frame[3] = 0x03;
         value_unsigned = extract(frame, startbit, length, UNSIGNED, INTEL);
         printf("\nstep 4.4\n");
-        assert(expected_value_unsigned == value_unsigned);
         printf("expected_value_unsigned:         %ld\n", expected_value_unsigned);
         printf("current_value:                   %ld\n", value_unsigned);
+        assert(expected_value_unsigned == value_unsigned);
 
         /* step 4.5 (lsb start of byte), signed */
         startbit  = 40;
@@ -315,9 +315,9 @@ int main(void)
         frame[6] = 0xE5;
         value_signed = (int64_t)extract(frame, startbit, length, SIGNED, INTEL);
         printf("\nstep 4.5\n");
-        assert(expected_value_signed == value_signed);
         printf("expected_value_signed:         %ld\n", expected_value_signed);
         printf("current_value:                 %ld\n", value_signed);
+        assert(expected_value_signed == value_signed);
 
         /* step 4.6 (signal on 7 bytes, lsb start of byte), unsigned */
         startbit  = 0;
@@ -332,9 +332,9 @@ int main(void)
         frame[6] = 0xAB;
         value_unsigned = extract(frame, startbit, length, UNSIGNED, INTEL);
         printf("\nstep 4.6\n");
-        assert(expected_value_unsigned == value_unsigned);
         printf("expected_value_unsigned:         %ld\n", expected_value_unsigned);
         printf("current_value:                   %ld\n", value_unsigned);
+        assert(expected_value_unsigned == value_unsigned);
 
         /* step 4.7 (signal on 4 bytes, lsb start of byte), signed */
         startbit  = 0;
@@ -347,9 +347,9 @@ int main(void)
         value_signed = (int64_t)extract(frame, startbit, length, SIGNED, INTEL);
 
         printf("\nstep 4.7\n");
-        assert(expected_value_signed == value_signed);
         printf("expected_value_signed:         %ld\n", expected_value_signed);
         printf("current_value:                 %ld\n", value_signed);
+        assert(expected_value_signed == value_signed);
 
         /*
          ***********************************************************************
@@ -372,8 +372,8 @@ int main(void)
         expected_frame[3] = 0x06;
         insert(frame, startbit, length, value_one_byte_unsigned, MOTOROLA);
         printf("\nstep 5.1");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /* step 5.2 all signal on 1 byte, signed */
         int64_t value_one_byte_signed = -15;
@@ -383,8 +383,8 @@ int main(void)
         expected_frame[3] = 0xF1;
         insert(frame, startbit, length, value_one_byte_signed, MOTOROLA);
         printf("\nstep 5.2");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /* step 5.3 (lsb middle of byte), unsigned */
         value_one_byte_unsigned = 63;
@@ -394,8 +394,8 @@ int main(void)
         expected_frame[0] = 0xFC;
         insert(frame, startbit, length, value_one_byte_unsigned, MOTOROLA);
         printf("\nstep 5.3");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /*
          * step x.x (lsb middle of byte), signed , signed signals always encoded 
@@ -410,8 +410,8 @@ int main(void)
         expected_frame[5] = 0x71;
         insert(frame, startbit, length, value_one_byte_unsigned, MOTOROLA);
         printf("\nstep 5.4");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /* step 5.5 (lsb start of byte), signed */
         value_one_byte_signed = -113;
@@ -421,8 +421,8 @@ int main(void)
         expected_frame[2] = 0x8F;
         insert(frame, startbit, length, value_one_byte_signed, MOTOROLA);
         printf("\nstep 5.5");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /* step 6 (2 bytes) */
         /* step 6.1 (all signal on 2 bytes), unsigned */
@@ -434,8 +434,8 @@ int main(void)
         expected_frame[7] = 0xAE;
         insert(frame, startbit, length, value_two_bytes_unsigned, MOTOROLA);
         printf("\nstep 6.1");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /* step 6.2 (all signal on 2 bytes), signed */
         int64_t value_two_bytes_signed = -59595;
@@ -446,8 +446,8 @@ int main(void)
         expected_frame[5] = 0x35;
         insert(frame, startbit, length, value_two_bytes_signed, MOTOROLA);
         printf("\nstep 6.2");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /* step 6.3 (lsb middle of byte), unsigned */
         value_two_bytes_unsigned = 189;
@@ -458,8 +458,8 @@ int main(void)
         expected_frame[3] = 0xA0;
         insert(frame, startbit, length, value_two_bytes_unsigned, MOTOROLA);
         printf("\nstep 6.3");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /*
          * step x.x (lsb middle of byte), signed , signed signals always encoded 
@@ -475,8 +475,8 @@ int main(void)
         expected_frame[5] = 0x6E;
         insert(frame, startbit, length, value_two_bytes_unsigned, MOTOROLA);
         printf("\nstep 6.4");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /* step 6.5 (lsb start of byte), signed */
         value_two_bytes_signed = -24244;
@@ -487,8 +487,8 @@ int main(void)
         expected_frame[1] = 0x4C;
         insert(frame, startbit, length, value_two_bytes_signed, MOTOROLA);
         printf("\nstep 6.5");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /* step 6.6 (signal on 7 bytes, lsb start of byte), unsigned */
         uint64_t value_seven_bytes_unsigned = 48413335211474859;
@@ -504,8 +504,8 @@ int main(void)
         expected_frame[6] = 0xAB;
         insert(frame, startbit, length, value_seven_bytes_unsigned, MOTOROLA);
         printf("\nstep 6.6");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /* step 6.7 (signal on 4 bytes, lsb start of byte), signed */
         int64_t value_four_bytes_signed = -489;
@@ -518,8 +518,8 @@ int main(void)
         expected_frame[7] = 0x17;
         insert(frame, startbit, length, value_four_bytes_signed, MOTOROLA);
         printf("\nstep 6.7");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /*
          ***********************************************************************
@@ -540,8 +540,8 @@ int main(void)
         expected_frame[2] = 0xF0;
         insert(frame, startbit, length, value_one_byte_unsigned, INTEL);
         printf("\nstep 7.1");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /* step 7.2 all signal on 1 byte, signed */
         value_one_byte_signed = -202;
@@ -551,8 +551,8 @@ int main(void)
         expected_frame[4] = 0x36;
         insert(frame, startbit, length, value_one_byte_signed, INTEL);
         printf("\nstep 7.2");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /* step 7.3 (lsb middle of byte), unsigned */
         value_one_byte_unsigned = 7;
@@ -562,8 +562,8 @@ int main(void)
         expected_frame[3] = 0xE0;
         insert(frame, startbit, length, value_one_byte_unsigned, INTEL);
         printf("\nstep 7.3");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /*
          * step x.x (lsb middle of byte), signed , signed signals always encoded 
@@ -578,8 +578,8 @@ int main(void)
         expected_frame[7] = 0x17;
         insert(frame, startbit, length, value_one_byte_unsigned, INTEL);
         printf("\nstep 7.4");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /* step 7.5 (lsb start of byte), signed */
         value_one_byte_signed = -199;
@@ -589,8 +589,8 @@ int main(void)
         expected_frame[5] = 0x39;
         insert(frame, startbit, length, value_one_byte_signed, INTEL);
         printf("\nstep 7.5");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /* step 8 (2 bytes) */
         /* step 8.1 (all signal on 2 bytes), unsigned */
@@ -602,8 +602,8 @@ int main(void)
         expected_frame[3] = 0xCB;
         insert(frame, startbit, length, value_two_bytes_unsigned, INTEL);
         printf("\nstep 8.1");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /* step 8.2 (all signal on 2 bytes), signed */
         value_two_bytes_signed = -48666;
@@ -614,8 +614,8 @@ int main(void)
         expected_frame[5] = 0x41;
         insert(frame, startbit, length, value_two_bytes_signed, INTEL);
         printf("\nstep 8.2");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /* step 8.3 (lsb middle of byte), unsigned */
         value_two_bytes_unsigned = 1707;
@@ -626,8 +626,8 @@ int main(void)
         expected_frame[6] = 0x6A;
         insert(frame, startbit, length, value_two_bytes_unsigned, INTEL);
         printf("\nstep 8.3");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /*
          * step x.x (lsb middle of byte), signed , signed signals always encoded 
@@ -643,8 +643,8 @@ int main(void)
         expected_frame[2] = 0x03;
         insert(frame, startbit, length, value_two_bytes_unsigned, INTEL);
         printf("\nstep 8.4");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /* step 8.5 (lsb start of byte), signed */
         value_two_bytes_signed = -59821;
@@ -655,8 +655,8 @@ int main(void)
         expected_frame[7] = 0x16;
         insert(frame, startbit, length, value_two_bytes_signed, INTEL);
         printf("\nstep 8.5");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /* step 8.6 (signal on 7 bytes, lsb start of byte), unsigned */
         value_seven_bytes_unsigned = 48413335211474859;
@@ -672,8 +672,8 @@ int main(void)
         expected_frame[6] = 0xAB;
         insert(frame, startbit, length, value_seven_bytes_unsigned, INTEL);
         printf("\nstep 8.6");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /* step 8.7 (signal on 4 bytes, lsb start of byte), signed */
         value_four_bytes_signed = -1339;
@@ -686,8 +686,8 @@ int main(void)
         expected_frame[3] = 0xC5;
         insert(frame, startbit, length, value_four_bytes_signed, MOTOROLA);
         printf("\nstep 8.7");
-        assert(test_equality(expected_frame, frame, 8));
         display(expected_frame, frame, 8);
+        assert(test_equality(expected_frame, frame, 8));
 
         /*
          ***********************************************************************
