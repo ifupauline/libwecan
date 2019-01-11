@@ -114,7 +114,7 @@ uint64_t extract(const uint8_t *frame, const uint16_t startbit,
 {
         uint16_t byte_index_msb = 0;
         uint16_t byte_index_lsb = 0;
-        uint16_t offset_lsb = 0;
+        uint8_t offset_lsb = 0;
         uint64_t target = 0;
 
         compute_indexes(startbit, length, endianness, &offset_lsb, 
