@@ -22,7 +22,7 @@
  * @param byte_index_msb [Out] byte index of the msb from the matrix start
  */
 void compute_indexes(const uint16_t startbit, const uint8_t length, uint8_t endianness, 
-                uint8_t *offset_lsb, uint16_t *byte_index_lsb, uint16_t *byte_index_msb)
+                uint16_t *offset_lsb, uint16_t *byte_index_lsb, uint16_t *byte_index_msb)
 {
         uint16_t msb = 0; 
         uint16_t lsb = 0;
@@ -114,7 +114,7 @@ uint64_t extract(const uint8_t *frame, const uint16_t startbit,
 {
         uint16_t byte_index_msb = 0;
         uint16_t byte_index_lsb = 0;
-        uint8_t offset_lsb = 0;
+        uint16_t offset_lsb = 0;
         uint64_t target = 0;
 
         compute_indexes(startbit, length, endianness, &offset_lsb, 
@@ -163,7 +163,7 @@ void insert(uint8_t *frame, uint16_t startbit, uint8_t length, uint64_t value,
 {
         uint16_t byte_index_msb = 0;
         uint16_t byte_index_lsb = 0;
-        uint8_t offset_lsb = 0;
+        uint16_t offset_lsb = 0;
         uint64_t target = 0;
 
         compute_indexes(startbit, length, endianness, &offset_lsb, 
