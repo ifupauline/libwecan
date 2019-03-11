@@ -1,1 +1,0 @@
--> Tests for frames longer than 8 bytes such as CANFD
