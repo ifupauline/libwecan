@@ -698,7 +698,7 @@ int main(void)
         printf("===========================================================\n");
         printf("ENCODE DECODE MOTOROLA 32 bits double value\n");
         printf("===========================================================\n");
-        volatile double physical_value = 66.66666;
+        double physical_value = 66.66666;
         init_single_frame(frame, 8);
         startbit = 7;
         length = 32;
@@ -838,7 +838,7 @@ int main(void)
         printf("===========================================================\n");
         printf("ENCODE DECODE INTEL int64_t negative value\n");
         printf("===========================================================\n");
-        volatile int64_t sphysical_value = -1029384756;
+        int64_t sphysical_value = -1029384756;
         init_single_frame(frame, 8);
         startbit = 0;
         length = 32;
@@ -861,7 +861,7 @@ int main(void)
         printf("===========================================================\n");
         printf("ENCODE DECODE MOTOROLA float negative value\n");
         printf("===========================================================\n");
-        volatile float fphysical_value = -2938.345666;
+        float fphysical_value = -2938.345666;
         init_single_frame(frame, 8);
         startbit = 7;
         length = 40;
