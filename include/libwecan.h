@@ -12,11 +12,11 @@
 #define INTEL     4
 #define MOTOROLA  5
 
-/**
+/*
  * @brief return byte indexes of msb, lsb and lsb bit offset from signal parameters
  * @param startbit [In] signal startbit = lsb in case of little-endian, msb else
  * @param length   [In] signal length in bits
- * @param endianness  true if signal data is in little endian format
+ * @param endianness  INTEL if signal data is in little endian format
  * @param offset_lsb     [Out] offset (0..7) of the lsb in its containing byte
  * @param byte_index_lsb [Out] byte index of the lsb from the matrix start
  * @param byte_index_msb [Out] byte index of the msb from the matrix start
@@ -62,7 +62,7 @@ void compute_indexes(const uint16_t startbit, const uint8_t length, uint8_t endi
         }
 }
 
-/**
+/*
  * @brief copy 8 bytes data chunk containing signal to a local temp var
  *        the endianness is taken in account
  * @param frame  frame data address
@@ -97,7 +97,7 @@ uint64_t frame_to_local(const uint8_t *frame, uint16_t byte_index_lsb,
         return target;
 }
 
-/**
+/*
  * @brief extract a signal value from a CAN frame
  * @param frame     frame data address
  * @param startbit  signal start bit
@@ -158,7 +158,7 @@ uint64_t extract(const uint8_t *frame, const uint16_t startbit,
  * @param value     signal value
  * @param endianness
  */
-void insert(uint8_t *frame, uint16_t startbit, uint8_t length, uint64_t value, 
+void insert(uint8_t *frame, uint16_t startbit, uint8_t length, uint64_t can_value, 
                 uint8_t endianness)
 {
         uint16_t byte_index_msb = 0;
@@ -170,13 +170,14 @@ void insert(uint8_t *frame, uint16_t startbit, uint8_t length, uint64_t value,
                         &byte_index_lsb, &byte_index_msb);
 
         target = frame_to_local(frame, byte_index_lsb, byte_index_msb, endianness);
+        
 
         /* create mask to erase current signal value */
         uint64_t mask = ((uint64_t)1 << length) - 1;
         uint64_t erase_mask = ~(mask << offset_lsb);
 
         /* erase and insert signal value into local data chunk */
-        target = (target & erase_mask) | (value << offset_lsb);
+        target = (target & erase_mask) | (can_value << offset_lsb);
 
         /* debug */
         //printf("length is: %d\n", length);
@@ -213,28 +214,28 @@ void insert(uint8_t *frame, uint16_t startbit, uint8_t length, uint64_t value,
 void encode_uint64_t(uint8_t *frame, uint64_t physical_value, uint16_t startbit,
                 uint8_t length, uint8_t endianness, double factor, double offset)
 {
-        uint64_t can_value = (physical_value - offset) / factor;
+        uint64_t can_value = (uint64_t)(((double)physical_value - offset) / factor);
         insert(frame, startbit, length, can_value, endianness);
 }
 
-void encode_int64_t(uint8_t *frame, int64_t physical_value, uint16_t startbit,
+void encode_int64_t(uint8_t *frame, volatile int64_t physical_value, uint16_t startbit,
                 uint8_t length, uint8_t endianness, double factor, double offset)
 {
-        uint64_t can_value = (physical_value - offset) / factor;
+        uint64_t can_value = (uint64_t)(((double)physical_value - offset) / factor);
         insert(frame, startbit, length, can_value, endianness);
 }
 
-void encode_double(uint8_t *frame, double physical_value, uint16_t startbit,
+void encode_double(uint8_t *frame, volatile double physical_value, uint16_t startbit,
                 uint8_t length, uint8_t endianness, double factor, double offset)
 {
-        uint64_t can_value = (uint64_t)((physical_value - offset) / factor);
+        uint64_t can_value = (uint64_t)(((double)physical_value - offset) / factor);
         insert(frame, startbit, length, can_value, endianness);
 }
 
-void encode_float(uint8_t *frame, float physical_value, uint16_t startbit,
+void encode_float(uint8_t *frame, volatile float physical_value, uint16_t startbit,
                 uint8_t length, uint8_t endianness, double factor, double offset)
 {
-        uint64_t can_value = (uint64_t)((physical_value - offset) / factor);
+        uint64_t can_value = (uint64_t)(((double)physical_value - offset) / factor);
         insert(frame, startbit, length, can_value, endianness);
 }
 
@@ -246,27 +247,27 @@ uint64_t decode_uint64_t(uint8_t *frame, uint16_t startbit, uint8_t length,
                 uint8_t endianness, double factor, double offset)
 {
         uint64_t can_value = extract(frame, startbit, length, UNSIGNED, endianness);
-        return (uint64_t)((can_value * factor) + offset);
+        return (uint64_t)(((double)can_value * factor) + offset);
 }
 
 int64_t decode_int64_t(uint8_t *frame, uint16_t startbit, uint8_t length, 
                 uint8_t endianness, double factor, double offset)
 {
         int64_t can_value = (int64_t)extract(frame, startbit, length, SIGNED, endianness);
-        return (int64_t)((can_value * factor) + offset);
+        return (int64_t)(((double)can_value * factor) + offset);
 }
 
 double decode_double(uint8_t *frame, uint16_t startbit, uint8_t length, 
                 uint8_t endianness, double factor, double offset)
 {
         int64_t can_value = (int64_t)extract(frame, startbit, length, SIGNED, endianness);
-        return (double)((can_value * factor) + offset);
+        return (double)(((double)can_value * factor) + offset);
 }
 
 float decode_float(uint8_t *frame, uint16_t startbit, uint8_t length, 
                 uint8_t endianness, double factor, double offset)
 {
         int64_t can_value = (int64_t)extract(frame, startbit, length, SIGNED, endianness);
-        return (float)((can_value * factor) + offset);
+        return (float)(((double)can_value * factor) + offset);
 }
 #endif /* LIBWECAN_H */
