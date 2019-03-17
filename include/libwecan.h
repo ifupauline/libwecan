@@ -39,7 +39,6 @@ void compute_indexes(const uint16_t startbit, const uint8_t length, uint8_t endi
 
                 int i;
                 for (i = 0; i < length - 1; i++) {
-
                         if (current_bit_nr % 8 == 0) {
                                 current_bit_nr = current_bit_nr + 15;
 
@@ -122,11 +121,12 @@ uint64_t extract(const uint8_t *frame, const uint16_t startbit,
 
         target = frame_to_local(frame, byte_index_lsb, byte_index_msb, endianness);
 
-        /* debug */
-        //printf("length is: %d\n", length);
-        //printf("offset_lsb is: %d\n", offset_lsb);
-        //printf("startbit is: %d\n", startbit);
-        //printf("byte_index_lsb: %d\nbyte_index_msb: %d\n", byte_index_lsb, byte_index_msb);
+#ifdef VERBOSE_DEBUG_
+        printf("length: %d\n", length);
+        printf("offset_lsb: %d\n", offset_lsb);
+        printf("startbit: %d\n", startbit);
+        printf("byte_index_lsb: %d\nbyte_index_msb: %d\n", byte_index_lsb, byte_index_msb);
+#endif
 
         /* remove lower bits not in signal (lower than offset lsb) */
         target = target >> offset_lsb;
@@ -150,7 +150,7 @@ uint64_t extract(const uint8_t *frame, const uint16_t startbit,
         return target;
 }
 
-/**
+/*
  * @brief insert a signal value into a CAN frame
  * @param frame     [In/Out] frame data address
  * @param startbit  signal start bit
@@ -179,11 +179,12 @@ void insert(uint8_t *frame, uint16_t startbit, uint8_t length, uint64_t can_valu
         /* erase and insert signal value into local data chunk */
         target = (target & erase_mask) | (can_value << offset_lsb);
 
-        /* debug */
-        //printf("length is: %d\n", length);
-        //printf("offset_lsb is: %d\n", offset_lsb);
-        //printf("startbit is: %d\n", startbit);
-        //printf("byte_index_lsb: %d\nbyte_index_msb: %d\n", byte_index_lsb, byte_index_msb);
+#ifdef VERBOSE_DEBUG_
+        printf("length: %d\n", length);
+        printf("offset_lsb: %d\n", offset_lsb);
+        printf("startbit: %d\n", startbit);
+        printf("byte_index_lsb: %d\nbyte_index_msb: %d\n", byte_index_lsb, byte_index_msb);
+#endif
 
         /* 
          * copy back data chunk containing signal into CAN frame by taken into
@@ -208,7 +209,7 @@ void insert(uint8_t *frame, uint16_t startbit, uint8_t length, uint64_t can_valu
         }
 }
 
-/**
+/*
  * @brief encode a physical value into CAN format and insert it into a frame
  */
 void encode_uint64_t(uint8_t *frame, uint64_t physical_value, uint16_t startbit,
@@ -228,7 +229,7 @@ void encode_int64_t(uint8_t *frame, volatile int64_t physical_value, uint16_t st
 void encode_double(uint8_t *frame, volatile double physical_value, uint16_t startbit,
                 uint8_t length, uint8_t endianness, double factor, double offset)
 {
-        uint64_t can_value = (uint64_t)(((double)physical_value - offset) / factor);
+        uint64_t can_value = (uint64_t)((physical_value - offset) / factor);
         insert(frame, startbit, length, can_value, endianness);
 }
 
@@ -239,9 +240,8 @@ void encode_float(uint8_t *frame, volatile float physical_value, uint16_t startb
         insert(frame, startbit, length, can_value, endianness);
 }
 
-/**
- * @brief extract a signal and decode it into physical value
- *
+/*
+ * @brief extract a signal and decode it into a physical value
  */
 uint64_t decode_uint64_t(uint8_t *frame, uint16_t startbit, uint8_t length, 
                 uint8_t endianness, double factor, double offset)
