@@ -1,11 +1,17 @@
 #include "../include/libwecan.h"
 #include <assert.h>
 
+#define PRECISION 0.00001
+
 void init_frames(uint8_t *expected_frame, uint8_t *frame, uint8_t dlc);
 
 void init_single_frame(uint8_t *frame, uint8_t dlc);
 
 int test_equality(uint8_t *expected_frame, uint8_t *frame, uint8_t dlc);
+
+int compare_float(float f1, float f2);
+
+int compare_double(double d1, double d2);
 
 void display(uint8_t *expected_frame, uint8_t *frame, uint8_t dlc);
 
@@ -710,7 +716,7 @@ int main(void)
         display_single(frame, 8);
         printf("\ndecoded value:       %.5lf\n", 
                         decode_double(frame, startbit, length, MOTOROLA, factor, offset));
-        assert(physical_value == decode_double(frame, startbit, length, MOTOROLA, factor, offset));
+        assert(compare_double(decode_double(frame, startbit, length, MOTOROLA, factor, offset), physical_value));
 
         /*
          ***********************************************************************
@@ -733,7 +739,7 @@ int main(void)
         display_single(frame, 8);
         printf("\ndecoded value:       %.7lf\n", 
                         decode_double(frame, startbit, length, MOTOROLA, factor, offset));
-        assert(physical_value == decode_double(frame, startbit, length, MOTOROLA, factor, offset));
+        assert(compare_double(decode_double(frame, startbit, length, MOTOROLA, factor, offset), physical_value));
 
         /*
          ***********************************************************************
@@ -779,8 +785,7 @@ int main(void)
         display_single(frame, 8);
         printf("\ndecoded value:       %.7lf\n",
                         decode_double(frame, startbit, length, INTEL, factor, offset));
-        assert(physical_value == 
-                        decode_double(frame, startbit, length, INTEL, factor, offset));
+        assert(compare_double(decode_double(frame, startbit, length, INTEL, factor, offset), physical_value));
 
         /*
          ***********************************************************************
@@ -803,8 +808,7 @@ int main(void)
         display_single(frame, 8);
         printf("\ndecoded value:       %.7lf\n", 
                         decode_double(frame, startbit, length, INTEL, factor, offset));
-        assert(physical_value == 
-                        decode_double(frame, startbit, length, INTEL, factor, offset));
+        assert(compare_double(decode_double(frame, startbit, length, INTEL, factor, offset), physical_value));
 
         /*
          ***********************************************************************
@@ -873,7 +877,7 @@ int main(void)
         display_single(frame, 8);
         printf("\ndecoded value:       %.6f\n", 
                         decode_float(frame, startbit, length, MOTOROLA, factor, offset));
-        assert(fphysical_value == decode_float(frame, startbit, length, MOTOROLA, factor, offset));
+        assert(compare_float(decode_float(frame, startbit, length, MOTOROLA, factor, offset), fphysical_value));
 
         return 0;
 }
@@ -936,4 +940,20 @@ void display_single(uint8_t *frame, uint8_t dlc)
                 printf("%02x ", frame[i]);
 
         printf("\n");
+}
+
+int compare_float(float f1, float f2)
+{
+        if (((f1 - PRECISION) < f2) && ((f1 + PRECISION) > f2))
+                return TRUE;
+        else 
+                return FALSE;
+}
+
+int compare_double(double d1, double d2)
+{
+        if (((d1 - PRECISION) < d2) && ((d1 + PRECISION) > d2))
+                return TRUE;
+        else 
+                return FALSE;
 }
