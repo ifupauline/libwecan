@@ -219,24 +219,24 @@ void encode_uint64_t(uint8_t *frame, uint64_t physical_value, uint16_t startbit,
         insert(frame, startbit, length, can_value, endianness);
 }
 
-void encode_int64_t(uint8_t *frame, volatile int64_t physical_value, uint16_t startbit,
+void encode_int64_t(uint8_t *frame, int64_t physical_value, uint16_t startbit,
                 uint8_t length, uint8_t endianness, double factor, double offset)
 {
-        uint64_t can_value = (uint64_t)(((double)physical_value - offset) / factor);
+        uint64_t can_value = (int64_t)(((double)physical_value - offset) / factor);
         insert(frame, startbit, length, can_value, endianness);
 }
 
-void encode_double(uint8_t *frame, volatile double physical_value, uint16_t startbit,
+void encode_double(uint8_t *frame, double physical_value, uint16_t startbit,
                 uint8_t length, uint8_t endianness, double factor, double offset)
 {
-        uint64_t can_value = (uint64_t)((physical_value - offset) / factor);
+        uint64_t can_value = (int64_t)((physical_value - offset) / factor);
         insert(frame, startbit, length, can_value, endianness);
 }
 
-void encode_float(uint8_t *frame, volatile float physical_value, uint16_t startbit,
+void encode_float(uint8_t *frame, float physical_value, uint16_t startbit,
                 uint8_t length, uint8_t endianness, double factor, double offset)
 {
-        uint64_t can_value = (uint64_t)(((double)physical_value - offset) / factor);
+        uint64_t can_value = (int64_t)(((double)physical_value - offset) / factor);
         insert(frame, startbit, length, can_value, endianness);
 }
 
