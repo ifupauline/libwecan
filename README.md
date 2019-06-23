@@ -25,3 +25,5 @@ NICE TO HAVE
   will extend beyond boundary. 
   At the moment it is up to the developper to not fuck it up by making sure 
   startbit, length and endianness are coherent to the size of frame (dlc).
+
+- Add functional test using Linux SocketCAN for CAN, CANFD and ISOTP

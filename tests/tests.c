@@ -967,7 +967,7 @@ int main(void)
         length = 32;
         factor = 0.0000001;
         offset = 0;
-        printf("\nstep 10.1\n\n");
+        printf("\nstep 10.2\n\n");
         printf("value to be encoded: %f\n", fphysical_value);
         encode_float(frame_fd3, fphysical_value, startbit, length, MOTOROLA, factor, offset);
         display_single(frame_fd3, 64);
@@ -991,7 +991,7 @@ int main(void)
         length = 32;
         factor = 0.0000001;
         offset = 0;
-        printf("\nstep 10.2\n\n");
+        printf("\nstep 10.3\n\n");
         printf("value to be encoded: %.7lf\n", dphysical_value);
         encode_double(frame_fd4, dphysical_value, startbit, length, INTEL, factor, offset);
         display_single(frame_fd4, 24);
