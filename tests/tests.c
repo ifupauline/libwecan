@@ -913,19 +913,19 @@ int main(void)
         printf("ENCODE DECODE MOTOROLA signed int value FDFRAME\n");
         printf("===========================================================\n");
         uint8_t frame_fd1[56];
-        uphysical_value = 255;
+        sphysical_value = -7777;
         init_single_frame(frame_fd1, 56);
-        startbit = 447; /* start of byte */
-        length = 8;
+        startbit = 431; /* start of byte */
+        length = 16;
         factor = 1;
         offset = 0;
         printf("\nstep 10.0\n\n");
-        printf("value to be encoded: %ld\n", uphysical_value);
-        encode_int64_t(frame_fd1, uphysical_value, startbit, length, MOTOROLA, factor, offset);
+        printf("value to be encoded: %ld\n", sphysical_value);
+        encode_int64_t(frame_fd1, sphysical_value, startbit, length, MOTOROLA, factor, offset);
         display_single(frame_fd1, 56);
         printf("\ndecoded value:       %ld\n", 
-                        decode_uint64_t(frame_fd1, startbit, length, MOTOROLA, factor, offset));
-        assert(uphysical_value == decode_uint64_t(frame_fd1, startbit, length, MOTOROLA, factor, offset));
+                        decode_int64_t(frame_fd1, startbit, length, MOTOROLA, factor, offset));
+        assert(sphysical_value == decode_int64_t(frame_fd1, startbit, length, MOTOROLA, factor, offset));
 
         /*
          ***********************************************************************
