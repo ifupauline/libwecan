@@ -1,22 +1,28 @@
-#variables
-CC=gcc
-DEBUG=-DVERBOSE_DEBUG_
-BIN=bin
-OUT=tests/tests
-SRC=tests/tests.c
+SRC_DIR += src
+OBJ_DIR += obj
+LIB_DIR += lib
 
-.PHONY: all
-all: 
-	@if [ ! -d "$(BIN)" ]; then mkdir $(BIN); fi;
-	$(CC) $(SRC) -o $(OUT);
-	@mv $(OUT) $(BIN);
+LIB += $(LIB_DIR)/libwecan.a
+SRC += $(wildcard $(SRC_DIR)/*.c)
+OBJ += $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-.PHONY: debug
-debug:
-	@if [ ! -d "$(BIN)" ]; then mkdir $(BIN); fi;
-	$(CC) $(DEBUG) $(SRC) -o $(OUT);
-	@mv $(OUT) $(BIN);
+CFLAGS += -Wall
+CFLAGS += -Iinclude/
 
-.PHONY: clean
+.PHONY: all clean
+
+all: $(LIB)
+
+$(LIB): $(OBJ) | $(LIB_DIR)
+	ar rc $(LIB) $<
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(LIB_DIR) $(OBJ_DIR):
+	mkdir -p $@
+
 clean:
-	@if [ -d "$(BIN)" ]; then rm -r $(BIN); echo "rm -r $(BIN)"; fi;
+	@$(RM) -rv $(LIB_DIR) $(OBJ_DIR)
+
+-include $(OBJ:.o=.d)

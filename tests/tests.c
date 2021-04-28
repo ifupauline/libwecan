@@ -1,21 +1,83 @@
-#include "../include/libwecan.h"
+#include "libwecan.h"
 #include <assert.h>
 
 #define PRECISION 0.00001
 
-void init_frames(uint8_t *expected_frame, uint8_t *frame, uint8_t dlc);
+static void init_frames(uint8_t *expected_frame, uint8_t *frame, uint8_t dlc)
+{
+        int i;
+        for (i = 0; i < dlc; i++) {
+                expected_frame[i] = 0x00;
+                frame[i] = 0x00;
+        }
+}
 
-void init_single_frame(uint8_t *frame, uint8_t dlc);
+static void init_single_frame(uint8_t *frame, uint8_t dlc)
+{
+        int i;
+        for (i = 0; i < dlc; i++) {
+                frame[i] = 0x00;
+        }
+}
 
-int test_equality(uint8_t *expected_frame, uint8_t *frame, uint8_t dlc);
+static int test_equality(uint8_t *expected_frame, uint8_t *frame, uint8_t dlc)
+{
+        int i;
+        for (i = 0; i < dlc; i++) {
 
-int compare_float(float f1, float f2);
+                if (expected_frame[i] == frame[i]) 
+                        continue;
+                else 
+                        return FALSE;
+        }
+        return TRUE;
+}
 
-int compare_double(double d1, double d2);
+static void display(uint8_t *expected_frame, uint8_t *frame, uint8_t dlc)
+{
+        printf("\n");
 
-void display(uint8_t *expected_frame, uint8_t *frame, uint8_t dlc);
+        printf("expected frame: ");
+        int i;
+        for (i = 0; i < dlc; i++) 
+                printf("%02x ", expected_frame[i]);
 
-void display_single(uint8_t *frame, uint8_t dlc);
+        printf("\n");
+
+        printf("frame:          ");
+        for (i = 0; i < dlc; i++) 
+                printf("%02x ", frame[i]);
+
+        printf("\n");
+}
+
+static void display_single(uint8_t *frame, uint8_t dlc)
+{
+        printf("\n");
+
+        printf("encoded frame: ");
+        int i;
+        for (i = 0; i < dlc; i++) 
+                printf("%02x ", frame[i]);
+
+        printf("\n");
+}
+
+static int compare_float(float f1, float f2)
+{
+        if (((f1 - PRECISION) < f2) && ((f1 + PRECISION) > f2))
+                return TRUE;
+        else 
+                return FALSE;
+}
+
+static int compare_double(double d1, double d2)
+{
+        if (((d1 - PRECISION) < d2) && ((d1 + PRECISION) > d2))
+                return TRUE;
+        else 
+                return FALSE;
+}
 
 int main(void)
 {
@@ -1000,80 +1062,4 @@ int main(void)
         assert(compare_double(decode_double(frame_fd4, startbit, length, INTEL, factor, offset), dphysical_value));
 
         return 0;
-}
-
-void init_frames(uint8_t *expected_frame, uint8_t *frame, uint8_t dlc)
-{
-        int i;
-        for (i = 0; i < dlc; i++) {
-                expected_frame[i] = 0x00;
-                frame[i] = 0x00;
-        }
-}
-
-void init_single_frame(uint8_t *frame, uint8_t dlc)
-{
-        int i;
-        for (i = 0; i < dlc; i++) {
-                frame[i] = 0x00;
-        }
-}
-
-int test_equality(uint8_t *expected_frame, uint8_t *frame, uint8_t dlc)
-{
-        int i;
-        for (i = 0; i < dlc; i++) {
-
-                if (expected_frame[i] == frame[i]) 
-                        continue;
-                else 
-                        return FALSE;
-        }
-        return TRUE;
-}
-
-void display(uint8_t *expected_frame, uint8_t *frame, uint8_t dlc)
-{
-        printf("\n");
-
-        printf("expected frame: ");
-        int i;
-        for (i = 0; i < dlc; i++) 
-                printf("%02x ", expected_frame[i]);
-
-        printf("\n");
-
-        printf("frame:          ");
-        for (i = 0; i < dlc; i++) 
-                printf("%02x ", frame[i]);
-
-        printf("\n");
-}
-
-void display_single(uint8_t *frame, uint8_t dlc)
-{
-        printf("\n");
-
-        printf("encoded frame: ");
-        int i;
-        for (i = 0; i < dlc; i++) 
-                printf("%02x ", frame[i]);
-
-        printf("\n");
-}
-
-int compare_float(float f1, float f2)
-{
-        if (((f1 - PRECISION) < f2) && ((f1 + PRECISION) > f2))
-                return TRUE;
-        else 
-                return FALSE;
-}
-
-int compare_double(double d1, double d2)
-{
-        if (((d1 - PRECISION) < d2) && ((d1 + PRECISION) > d2))
-                return TRUE;
-        else 
-                return FALSE;
 }
