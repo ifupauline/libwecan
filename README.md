@@ -1,3 +1,3 @@
 # libwecan
 
-Header only library in C to encode/decode CAN signal.
+Library in C to encode/decode CAN signals.
