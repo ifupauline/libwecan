@@ -4,15 +4,6 @@ Library in C to encode/decode CAN signals.
 
 ### Install
 ```sh
+cmake .
 make
-sudo make install
-```
-
-### Uninstall
-```sh
-sudo make uninstall
-```
-### Run Tests
-```sh
-./run-tests.sh
 ```
