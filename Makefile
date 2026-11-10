@@ -14,12 +14,14 @@ CFLAGS += -MD
 
 LDFLAGS += -shared
 
+LDLIBS += -lm
+
 .PHONY: all clean
 
 all: $(LIB) build-tests
 
 $(LIB): $(OBJ) | $(LIB_DIR)
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS)  -o $@ -c $<
