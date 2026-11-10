@@ -1146,5 +1146,109 @@ int main(void)
         assert(cmp_double(decode_double(frame_fd4, startbit, len, INTEL, 
                                         factor, offset), dphy_value));
 
+        /*
+         ***********************************************************************
+         * REGRESSION: signal insertion must not overwrite neighbour signals
+         ***********************************************************************
+         */
+        printf("\n\n\n");
+        printf("===========================================================\n");
+        printf("REGRESSION neighbour signals preserved\n");
+        printf("===========================================================\n");
+        {
+                uint8_t f[8];
+                uint8_t exp_intel[8] = {0xAA, 0xAF, 0xAA, 0xAA,
+                                        0xAA, 0xAA, 0xAA, 0xAA};
+                uint8_t exp_moto[8]  = {0xFA, 0xAA, 0xAA, 0xAA,
+                                        0xAA, 0xAA, 0xAA, 0xAA};
+
+                /* negative value into 4-bit INTEL signal at bit 8 */
+                memset(f, 0xAA, 8);
+                encode_int64_t(f, -1, 8, 4, INTEL, 1, 0);
+                display_two(exp_intel, f, 8);
+                assert(asserteq(exp_intel, f, 8));
+                assert(decode_int64_t(f, 8, 4, INTEL, 1, 0) == -1);
+
+                /* negative value into 4-bit MOTOROLA signal at bit 7 */
+                memset(f, 0xAA, 8);
+                encode_int64_t(f, -1, 7, 4, MOTOROLA, 1, 0);
+                display_two(exp_moto, f, 8);
+                assert(asserteq(exp_moto, f, 8));
+                assert(decode_int64_t(f, 7, 4, MOTOROLA, 1, 0) == -1);
+
+                /* out of range raw value is truncated to the signal len */
+                memset(f, 0xAA, 8);
+                insert(f, 8, 4, 0x1F, INTEL);
+                assert(asserteq(exp_intel, f, 8));
+        }
+
+        /*
+         ***********************************************************************
+         * REGRESSION: encoding rounds to the nearest raw value
+         ***********************************************************************
+         */
+        printf("\n\n\n");
+        printf("===========================================================\n");
+        printf("REGRESSION encoding rounding\n");
+        printf("===========================================================\n");
+        {
+                uint8_t f[8];
+                int i;
+
+                for (i = 0; i <= 1000; i++) {
+                        memset(f, 0, 8);
+                        encode_double(f, i * 0.1, 0, 16, INTEL, 0.1, 0);
+                        assert(extract(f, 0, 16, UNSIGNED, INTEL)
+                                        == (uint64_t)i);
+                }
+                memset(f, 0, 8);
+                encode_double(f, -0.3, 0, 16, INTEL, 0.1, 0);
+                assert((int64_t)extract(f, 0, 16, SIGNED, INTEL) == -3);
+                printf("ok\n");
+        }
+
+        /*
+         ***********************************************************************
+         * REGRESSION: 64-bit signals and signals spanning 9 bytes
+         ***********************************************************************
+         */
+        printf("\n\n\n");
+        printf("===========================================================\n");
+        printf("REGRESSION 64-bit and 9-byte signals\n");
+        printf("===========================================================\n");
+        {
+                uint8_t f[16];
+                uint8_t g[16];
+
+                memset(f, 0xAB, 16);
+                assert(extract(f, 0, 64, UNSIGNED, INTEL)
+                                == 0xABABABABABABABABULL);
+                assert(extract(f, 7, 64, UNSIGNED, MOTOROLA)
+                                == 0xABABABABABABABABULL);
+
+                /* 60-bit INTEL signal at bit 6 covers bytes 0..8 */
+                memset(f, 0, 16);
+                insert(f, 6, 60, 0x0123456789ABCDEFULL, INTEL);
+                assert(f[9] == 0);
+                assert(extract(f, 6, 60, UNSIGNED, INTEL)
+                                == 0x0123456789ABCDEFULL);
+
+                /* 64-bit MOTOROLA signal with msb at bit 3 covers 0..8 */
+                memset(f, 0x55, 16);
+                memcpy(g, f, 16);
+                insert(f, 3, 64, 0xFEDCBA9876543210ULL, MOTOROLA);
+                assert(f[9] == 0x55);
+                assert((f[0] & 0xF0) == (g[0] & 0xF0));
+                assert(extract(f, 3, 64, UNSIGNED, MOTOROLA)
+                                == 0xFEDCBA9876543210ULL);
+
+                /* invalid len is a no-op */
+                memcpy(g, f, 16);
+                insert(f, 0, 0, 0xFF, INTEL);
+                assert(memcmp(f, g, 16) == 0);
+                assert(extract(f, 0, 0, SIGNED, INTEL) == 0);
+                printf("ok\n");
+        }
+
         return 0;
 }
